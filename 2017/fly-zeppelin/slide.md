@@ -17,11 +17,9 @@ Zeppelin Helium : Spell
 
 Frontend interpreter ==runs on browser== not in backend. 
 
-- **pluggable**: can be installed / removed easily 
-([Helium Online Registry](http://zeppelin.apache.org/helium_packages.html))
-- **written in javascript**: can utilise exisiting libraries
-([flowchart](http://flowchart.js.org/), [sigmajs](http://sigmajs.org/), [vega](http://vega.github.io/vega-editor/index.html?mode=vega), [papaparse](http://papaparse.com/))
-- **can be display system as well**
+- **pluggable**
+- **written in javascript**
+- **can be display system**
 - available in **0.8.0-SNAPSHOT** ([ZEPPELIN #1940](https://github.com/apache/zeppelin/pull/1940))
 
 ---
@@ -30,13 +28,6 @@ Frontend interpreter ==runs on browser== not in backend.
 <!-- *template: invert -->
 
 ### What?! :flushed:
-
----
-
-### DEMO
-
-<!-- *page_number: false -->
-<!-- *template: gaia -->
 
 ---
 
@@ -77,6 +68,9 @@ println("Hello, Zeppelin!")
 
 #### Background: ==Display System==
 
+- Display system renders result which already translated by backend interpreters **on browser** 
+([Basic Display System](http://zeppelin.apache.org/docs/0.7.0/displaysystem/basicdisplaysystem.html#basic-display-system-in-apache-zeppelin): `%html`, `%table`, `%angular`)
+
 ```go
 %spark 
 
@@ -87,8 +81,6 @@ println(s"%html <h3>result is ${total}</h3>")
 // `%html <h3>total value is 195<h3>`
 ```
 
-- [Basic Display System](http://zeppelin.apache.org/docs/0.7.0/displaysystem/basicdisplaysystem.html#basic-display-system-in-apache-zeppelin): `%html`, `%table`, `%angular`
-- Display system renders result **on browser not on backend**
 - Can we do better?  (e.g `%markdown` display type)
 
 ---
@@ -116,6 +108,13 @@ Frontend interpreter runs on browser not in backend.
 - **written in javascript**: can utilise exisiting libraries
 ([flowchart](http://flowchart.js.org/), [sigmajs](http://sigmajs.org/), [vega](http://vega.github.io/vega-editor/index.html?mode=vega), [papaparse](http://papaparse.com/), ...)
 - **can be display system as well** ([ZEPPELIN-2089](https://issues.apache.org/jira/browse/ZEPPELIN-2089))
+
+---
+
+### DEMO
+
+<!-- *page_number: false -->
+<!-- *template: gaia -->
 
 ---
 
