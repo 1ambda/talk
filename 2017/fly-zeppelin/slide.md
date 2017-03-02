@@ -15,7 +15,7 @@ Zeppelin Helium : Spell
 
 ### What is Spell?
 
-Frontend interpreter runs on browser not in backend. 
+Frontend interpreter ==runs on browser== not in backend. 
 
 - **pluggable**: can be installed / removed easily 
 ([Helium Online Registry](http://zeppelin.apache.org/helium_packages.html))
@@ -81,10 +81,10 @@ println("Hello, Zeppelin!")
 %spark 
 
 val total = 195
-println(s"%html <h3>result is ${result}</h3>") 
+println(s"%html <h3>result is ${total}</h3>") 
 
 // will be interpreted by spark interpreter
-// `%html <h3>result is 195<h3>`
+// `%html <h3>total value is 195<h3>`
 ```
 
 - [Basic Display System](http://zeppelin.apache.org/docs/0.7.0/displaysystem/basicdisplaysystem.html#basic-display-system-in-apache-zeppelin): `%html`, `%table`, `%angular`
@@ -98,9 +98,9 @@ println(s"%html <h3>result is ${result}</h3>")
 ### Motivation: Spell
 
 - [How can i pass variables from spark to markdown in Zeppelin](http://stackoverflow.com/questions/41543593/zeppelin-pass-variable-from-spark-to-markdown-to-generate-dynamic-narrative-te)
-- Do we really need **backend** markdown interpreter? ([markdown-it](https://github.com/markdown-it/markdown-it))
+- Do we really need ==backend== markdown interpreter? ([awesome js markdown library](https://markdown-it.github.io/))
 - What if we implement `%markdown` as a **frontend** interpreter?
-- Then, **we can also use them as display system** because it runs on browser like `%html`
+- Then, **==we can also use them as display system==** because it runs on browser like `%html` :smirk:
 
 ---
 
@@ -114,7 +114,7 @@ Frontend interpreter runs on browser not in backend.
 - **pluggable**: can be installed / removed easily 
 ([Helium Online Registry](http://zeppelin.apache.org/helium_packages.html))
 - **written in javascript**: can utilise exisiting libraries
-([flowchart](http://flowchart.js.org/), [sigmajs](http://sigmajs.org/), [vega](http://vega.github.io/vega-editor/index.html?mode=vega), [papaparse](http://papaparse.com/))
+([flowchart](http://flowchart.js.org/), [sigmajs](http://sigmajs.org/), [vega](http://vega.github.io/vega-editor/index.html?mode=vega), [papaparse](http://papaparse.com/), ...)
 - **can be display system as well** ([ZEPPELIN-2089](https://issues.apache.org/jira/browse/ZEPPELIN-2089))
 
 ---
@@ -136,7 +136,8 @@ Frontend interpreter runs on browser not in backend.
 <!-- *page_number: false -->
 
 ### DEMO
-#### zeppelin-echo-spell
+#### ==1.== zeppelin-echo-spell
+#### ==2.== zeppelin-markdown-spell
 
 ---
 
@@ -146,6 +147,7 @@ Frontend interpreter runs on browser not in backend.
 
 - every spell takes paragraph text (==string==)
 - returns ==SpellResult==
+- [spell-base.js](https://github.com/1ambda/zeppelin/blob/dbc4f10fd3ee556d5e38cb4f6e3966661eaf69a9/zeppelin-web/src/app/spell/spell-base.js#L37-L39)
 - example: [zeppelin-echo-spell](https://github.com/1ambda/zeppelin-echo-spell/blob/37703288cb1a9bd1af1d90bef907d8bcbef78fae/index.js#L24-#L32)
 
 ```javascript
@@ -160,8 +162,9 @@ interpret(paragraphText) {
 
 ### Creating Spell: ==SpellResult==
 
-- ==SpellResult(result, displayType)==
-- ==displayType== can be optional (default is ==`%text`==)
+- ==SpellResult(data, displayType)==
+- [displayType](https://github.com/apache/zeppelin/blob/0589e27e7bb84ec81e1438bcbf3f2fd80ee5a963/zeppelin-web/src/app/spell/spell-result.js#L26-#L32) can be optional (default is ==`%text`==)
+
 
 ```go
 import {
@@ -171,8 +174,8 @@ import {
 } from 'zeppelin-spell';
 
 interpret(paragraphText) {
-  const result = `<h2>${paragraphText}</h2>`
-  return new SpellResult(result, DefaultDisplayType.HTML)
+  const html = `<h2>${paragraphText}</h2>`
+  return new SpellResult(html, DefaultDisplayType.HTML)
 }
 ```
 
@@ -187,12 +190,12 @@ interpret(paragraphText) {
 
 ```go
 interpret(paragraphText) {
-   const htmlResult = '<h4>Hello</h4>'
-   const textResult = 'Spell'
+   const html = '<h4>Hello</h4>'
+   const text = 'Spell'
 
    return new SpellResult()
-    .add(htmlResult, DefaultDisplayType.HTML)
-    .add(Result, DefaultDisplayType.TEXT /** optional */)
+    .add(html, DefaultDisplayType.HTML)
+    .add(text, DefaultDisplayType.TEXT /** optional */)
 }
 ```
 
@@ -202,15 +205,16 @@ interpret(paragraphText) {
 
 ### Creating Spell: ==SpellResult== (cont.)
 
-- pass ==Promise== for **API call**
+- pass ==Promise== for **API call** (async)
 - psss ==Function== which takes elem id to **draw DOM**
+- [default display types](https://github.com/apache/zeppelin/blob/0589e27e7bb84ec81e1438bcbf3f2fd80ee5a963/zeppelin-web/src/app/spell/spell-result.js#L26-#L32)
 
 
-|result|displayType|example|
-|:--|:-:|:--|
-|Object|ALL (except ELEMENT)|[markdown](https://github.com/apache/zeppelin/blob/336df5617b3a2ca43a8fe7b600508d8e8b0b9a25/zeppelin-examples/zeppelin-example-spell-markdown/index.js#L34-L40)
-|Promise|ALL (except ELEMENT)|[translator API](https://github.com/apache/zeppelin/blob/336df5617b3a2ca43a8fe7b600508d8e8b0b9a25/zeppelin-examples/zeppelin-example-spell-translator/index.js#L47)
-|Function|ELEMENT (`%element`)|[flowchart-spell](https://github.com/apache/zeppelin/blob/336df5617b3a2ca43a8fe7b600508d8e8b0b9a25/zeppelin-examples/zeppelin-example-spell-flowchart/index.js#L38-L41)
+|data|displayType|example|
+|:--:|:-:|:--|
+|==String==|ALL (except `%element`)|[markdown-spell](https://github.com/apache/zeppelin/blob/336df5617b3a2ca43a8fe7b600508d8e8b0b9a25/zeppelin-examples/zeppelin-example-spell-markdown/index.js#L34-L40)
+|==Promise==|ALL (except `%element`)|[translator-spell](https://github.com/apache/zeppelin/blob/336df5617b3a2ca43a8fe7b600508d8e8b0b9a25/zeppelin-examples/zeppelin-example-spell-translator/index.js#L47)
+|==Function==|ELEMENT (`%element`)|[flowchart-spell](https://github.com/apache/zeppelin/blob/336df5617b3a2ca43a8fe7b600508d8e8b0b9a25/zeppelin-examples/zeppelin-example-spell-flowchart/index.js#L38-L41)
 
 ---
 
@@ -254,9 +258,13 @@ we need your help :sob:
 
 <!-- *template: invert -->
 
+### References
+
+- Image: [Zeppelin Interpreter Architecture](http://zeppelin.apache.org/docs/latest/development/writingzeppelininterpreter.html)
+
 ### Resources
 
-- [Image: Zeppelin Interpreter Architecture](http://zeppelin.apache.org/docs/latest/development/writingzeppelininterpreter.html)
+- Slide: [github.com/1ambda/talk/2017/fly-zeppelin](https://github.com/1ambda/talk/tree/master/2017/fly-zeppelin)
 
 ---
 
