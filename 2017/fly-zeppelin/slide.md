@@ -111,10 +111,15 @@ Frontend interpreter runs on browser not in backend.
 
 ---
 
-### DEMO
-
 <!-- *page_number: false -->
 <!-- *template: gaia -->
+
+### DEMO
+
+#### ==1.== zeppelin-flowchart-spell
+#### ==2.== zeppelin-csv-spell
+#### ==3.== zeppelin-json-spell
+#### ==4.== zeppelin-translator-spell
 
 ---
 
